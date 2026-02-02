@@ -7,7 +7,7 @@ from pyrogram.types import (
     InputMediaVideo,
     Message,
 )
-from Song.config import BANNED_USERS, SONG_DOWNLOAD_DURATION, SONG_DOWNLOAD_DURATION_LIMIT, PLAYLIST_CHANNEL, PLAYLIST_URL, BOT_USERNAME
+from Song.config import BANNED_USERS, SONG_DOWNLOAD_DURATION, SONG_DOWNLOAD_DURATION_LIMIT, PLAYLIST_CHANNEL, PLAYLIST_URL, BOT_USERNAME, BOT_TOKEN, API_ID, API_HASH
 from Song.Music.Youtube import YouTubeAPI
 from Song.utils.decorators.language import language, languageCB
 YouTube = YouTubeAPI()
