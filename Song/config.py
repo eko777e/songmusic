@@ -14,6 +14,9 @@ PLAYLIST_CHANNEL = "UzeyirPlaylist"
 PLAYLIST_URL = "https://t.me/UzeyirPlaylist"
 BOT_USERNAME = "UzeyirMusic_Bot"
 OWNER_IDS = [8493825254]
+BOT_TOKEN = "7887939438:AAGOEqFr0zC1c6MbYYmT13idY2THTmtfzx4"
+API_ID = "24168862"
+API_HASH = "916a9424dd1e58ab7955001ccc0172b3"
     
 BANNED_USERS = filters.user()
 
