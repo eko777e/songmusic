@@ -32,33 +32,33 @@ async def start(client, message):
                 else:
                     return await mystic.edit("❌Musiqi tapılmadı")
         else:
-            await message.reply_text(f"👋Salam {message.from_user.mention}\n\nℹ️**Mən musiqi yükləmək üçün hazırlanmış botam**\n\n✅İstifadə qaydasını öyrənmək üçün əmrlər bölməsinə daxil olun", reply_markup=start_markup)
+            await message.reply_text(f"Salam {message.from_user.mention} 💞\nMən musiqi yükləmək botuyam**\nMənim funksiyalarım üçün Komandalar buttonuna toxun", reply_markup=start_markup)
             await app.send_message(LOG_GROUP_ID, f"👤{message.from_user.mention} botu başlatdı\n\n**🆔ID:** `{message.from_user.id}`")
             return await add_served_user(message.from_user.id)
     else:
-        await message.reply_text(f"👋Salam {message.from_user.mention} bot aktivdir\n\n🎵Musiqi yükləmək üçün /song əmrindən istifadə edə bilərsiniz\n\n🆘Hər hansı bir problemlə qarşılaşsanız botun kömək qrupunda soruşa bilərsiniz", reply_markup=group_markup)
+        await message.reply_text(f"Salam {message.from_user.mention} aktivdir ✅", reply_markup=group_markup)
         await app.send_message(LOG_GROUP_ID, f"💡 {message.from_user.mention} `{message.chat.title}` qrupunda botu başlatdı")
         return await add_served_chat(message.chat.id)
 
 
 @app.on_callback_query(filters.regex("cbstart"))
 async def cbstart(client, query):
-    await query.edit_message_text(f"👋Salam {query.from_user.mention}\n\nℹ️**Mən musiqi yükləmək üçün hazırlanmış botam**\n\n✅İstifadə qaydasını öyrənmək üçün əmrlər bölməsinə daxil olun", reply_markup=start_markup)
+    await query.edit_message_text(f"Salam {query.from_user.mention} 💞\nMən musiqi yükləmək botuyam\nMənim funksiyalarım üçün Komandalar buttonuna toxun", reply_markup=start_markup)
 
 
 @app.on_message(filters.command("help"))
 async def help(client, message):
-    await message.reply_text(f"🎵Musiqi yükləmək üçün həm /song əmrindən istifadə edərək, həm də musiqi adını və ya YouTube linkini göndərərək, yükləyə bilərsiniz\n\n🔍Axtarış etmək üçün /search əmrindən istifadə edə bilərsiniz\n\n**⚠️Botun qruplarda normal işləyə bilməsi üçün admin olmalıdır**", reply_markup=help_markup)
+    await message.reply_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz.", reply_markup=help_markup)
 
 
 @app.on_callback_query(filters.regex("cbhelp"))
 async def help_cb(client, query):
-    await query.edit_message_text(f"🎵Musiqi yükləmək üçün həm /song əmrindən istifadə edərək, həm də musiqi adını və ya YouTube linkini göndərərək, yükləyə bilərsiniz\n\n🔍Axtarış etmək üçün /search əmrindən istifadə edə bilərsiniz\n\n**⚠️Botun qruplarda işləyə bilməsi üçün admin olmalıdır**", reply_markup=help_cb_markup)
+    await query.edit_message_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz", reply_markup=help_cb_markup)
 
 
 @app.on_message(filters.command("alive") & filters.user(OWNER_ID))
 async def alive(client, message):
-    await message.reply_text("`😎Mən əla işləyirəm`")
+    await message.reply_text("`✅`")
 
 
 @app.on_message(filters.command("send") & filters.private & filters.user(OWNER_ID))
@@ -68,7 +68,7 @@ async def send(client, message):
     text = command_parts[2]
     try:
         await app.send_message(id, text)
-        await message.reply("✅Mesaj göndərildi")
+        await message.reply("✅ Mesaj göndərildi")
     except Exception as e:
         await message.reply(f"❌Xəta baş verdi: {str(e)}")
 
@@ -79,11 +79,11 @@ async def welcome(client, message):
         if str(new_user.id) == str(BOT_ID):
             count = await app.get_chat_members_count(message.chat.id)
             if message.from_user:
-                await message.reply(f"👋Salam {message.from_user.mention} məni `{message.chat.title}` qrupuna əlavə etdiyiniz üçün təşəkkürlər🥰")
-                await app.send_message(LOG_GROUP_ID, f"🚀 {message.from_user.mention} məni `{message.chat.title}` qrupuna əlavə etdi\n\n💡Qrup üzvlərinin sayı: {count}")
+                await message.reply(f"Salam {message.from_user.mention}💞\nMəni `{message.chat.title}` Chat Bölməsinə əlavə etdiyiniz üçün təşəkkür 👀")
+                await app.send_message(LOG_GROUP_ID, f"🚀 {message.from_user.mention} botu `{message.chat.title}` qrupuna əlavə etdi.\n\n👤 Qrup üzvlərinin sayı: {count}")
             else:
-                await message.reply(f"👋Salam, məni `{message.chat.title}` qrupuna əlavə etdiyiniz üçün təşəkkürlər🥰")
-                await app.send_message(LOG_GROUP_ID, f"🚀Mən `{message.chat.title}` qrupuna əlavə edildim\n\n💡Qrup üzvlərinin sayı: {count}")
+                await message.reply(f"Salam {message.chat.title} Chat Bölməsinə əlavə etdiyiniz üçün təşəkkürlər. 👀")
+                await app.send_message(LOG_GROUP_ID, f"🚀 `{message.chat.title}` qrupuna əlavə edildim\n\n👤 Qrup üzvlərinin sayı: {count}")
             await add_served_chat(message.chat.id)
 
 
