@@ -14,7 +14,7 @@ async def command_song(client, message):
     else:
         await add_served_chat(message.chat.id)
         if message.sender_chat:
-            return await message.reply_text("❌Siz bu qrupunda **anonim** adminsiniz\n\n💡Admin hüquqlarından istifadəçi hesabına qayıdaraq, yenidən cəhd edin")
+            return await message.reply_text("❌ Siz bu qrupunda **anonim** adminsiniz\n✅ Admin hüquqlarından istifadəçi hesabına qayıdaraq, yenidən cəhd edin")
     if len(message.command) < 2:
         return await message.reply_text("💡**İstifadə**:\n\n🔗/song (YouTube linki və ya musiqi adı)")
     query = " ".join(message.command[1:])
@@ -28,7 +28,7 @@ async def command_song(client, message):
                 return await mystic.edit("❌Canlı musiqiləri yükləmək olmur")
             await mystic.delete()
             buttons = song_markup(videoid, message.from_user.id)
-            return await message.reply_photo(photo=thumb, caption=f"📎**Adı**: [{title}]({link})\n\n⏳**Müddəti**: `{duration_min}`", reply_markup=buttons)
+            return await message.reply_photo(photo=thumb, caption=f"🎵 **Başlıq**: [{title}]({link})\n\n⏰ **Müddəti**: `{duration_min}`", reply_markup=buttons)
         else:
             return await mystic.edit("❌Musiqi tapılmadı")
     else:
