@@ -16,29 +16,29 @@ async def command_song(client, message):
         if message.sender_chat:
             return await message.reply_text("❌ Siz bu qrupunda **anonim** adminsiniz\n✅ Admin hüquqlarından istifadəçi hesabına qayıdaraq, yenidən cəhd edin")
     if len(message.command) < 2:
-        return await message.reply_text("💡**İstifadə**:\n\n🔗/song (YouTube linki və ya musiqi adı)")
+        return await message.reply_text("👀 **İstifadə**:\n\n🎧 /song (YouTube linki və yaxud musiqi adı)")
     query = " ".join(message.command[1:])
-    mystic = await message.reply_text("`🔍Musiqi axtarılır...`")
+    mystic = await message.reply_text("🔍 **Musiqi axtarılır...**")
     url = get_url(query)
     if url:
         result = await loop.run_in_executor(None, get_yt_info_query, url)
         if result:
             title, duration_min, thumb, videoid, link = result
             if str(duration_min) == "None" or duration_min == 0:
-                return await mystic.edit("❌Canlı musiqiləri yükləmək olmur")
+                return await mystic.edit("❌ **Canlı musiqiləri yükləmək olmur**")
             await mystic.delete()
             buttons = song_markup(videoid, message.from_user.id)
-            return await message.reply_photo(photo=thumb, caption=f"🎵 **Başlıq**: [{title}]({link})\n\n⏰ **Müddəti**: `{duration_min}`", reply_markup=buttons)
+            return await message.reply_photo(photo=thumb, caption=f"🎵 **Başlıq**: [{title}]({link})\n\n⏰ **Müddət**: {duration_min}\n\n🤖 **Bot:** @SongAzRobot", reply_markup=buttons)
         else:
-            return await mystic.edit("❌Musiqi tapılmadı")
+            return await mystic.edit("❌ **Musiqi tapılmadı**")
     else:
         result = await loop.run_in_executor(None, get_yt_info_query, query)
         if result:
             title, duration_min, thumb, videoid, link = result
             if str(duration_min) == "None" or duration_min == 0:
-                return await mystic.edit("❌Canlı musiqiləri yükləmək olmur")
+                return await mystic.edit("❌ **Canlı musiqiləri yükləmək olmur**")
             await mystic.delete()
             buttons = song_markup(videoid, message.from_user.id)
-            return await message.reply_photo(photo=thumb, caption=f"📎**Adı**: [{title}]({link})\n\n⏳**Müddəti**: `{duration_min}`", reply_markup=buttons)
+            return await message.reply_photo(photo=thumb, caption=f"🎵 **Başlıq**: [{title}]({link})\n\n⏰ **Müddət**: {duration_min}\n\n🤖 **Bot:** @SongAzRobot", reply_markup=buttons)
         else:
-            return await mystic.edit("❌Musiqi tapılmadı")
+            return await mystic.edit("❌ **Musiqi tapılmadı**")
