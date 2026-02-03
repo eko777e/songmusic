@@ -1,9 +1,26 @@
-import re, os, requests
+import re, os, requests, asyncio
 from yt_dlp import YoutubeDL
 from eyed3 import load
 from eyed3.id3.frames import ImageFrame
 from youtube_search import YoutubeSearch
-from Song import loop
+
+# Heroku üçün mütləq /tmp istifadə olunur
+ydl_opts = {
+    "format": "bestaudio/best",
+    "cookiefile": "music.txt",  # Əgər həqiqətən lazımdırsa
+    "postprocessors": [
+        {
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192",
+        }
+    ],
+    "outtmpl": "/tmp/%(id)s.%(ext)s",
+    "geo_bypass": True,
+    "nocheckcertificate": True,
+    "quiet": True,
+    "no_warnings": True,
+}
 
 
 def get_url(query):
@@ -11,28 +28,20 @@ def get_url(query):
         if "watch" in query:
             return query
         else:
-            if "?" in query:
-                return re.sub(r'\?.*', '', query)
-            else:
-                return query
-    else:
-        return None
+            return re.sub(r'\?.*', '', query) if "?" in query else query
+    return None
 
 
 def get_yt_info_query(query: str):
     results = YoutubeSearch(query, max_results=1).to_dict()
     if not results:
         return None
-    try:
-        result = results[0]
-    except:
+    result = results[0]
+    videoid = result.get("id")
+    if not videoid:
         return None
-    try:
-        videoid = result["id"]
-    except:
-        return None
-    title = result["title"]
-    duration_min = result["duration"]
+    title = result.get("title", "Bilinməyən ad")
+    duration_min = result.get("duration", "0:00")
     thumbnail = result["thumbnails"][0].split("?")[0]
     link = f"https://youtu.be/{videoid}"
     return title, duration_min, thumbnail, videoid, link
@@ -40,57 +49,42 @@ def get_yt_info_query(query: str):
 
 def youtube_search(link):
     results = YoutubeSearch(link, max_results=1).to_dict()
-    try:
-        title = results[0]["title"]
-        name = re.sub(r"\W+", " ", title)
-    except:
-        title = "Bilinməyən ad"
-        name = "Bilinməyən ad"
-    try:
-        artist = results[0]["channel"]
-    except:
-        artist = "Bilinməyən kanal"
-    duration_min = results[0]["duration"]
+    if not results:
+        return "Bilinməyən ad", "Bilinməyən ad", "Bilinməyən kanal", "0:00", "bot.jpg"
+    title = results[0].get("title", "Bilinməyən ad")
+    name = re.sub(r"\W+", " ", title)
+    artist = results[0].get("channel", "Bilinməyən kanal")
+    duration_min = results[0].get("duration", "0:00")
     thumbnail = results[0]["thumbnails"][0].split("?")[0]
     return title, name, artist, duration_min, thumbnail
 
 
-ydl_opts = {
-        "format": "bestaudio/best",
-        "cookiefile": "music.txt",
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "192",
-            }
-        ],
-        "outtmpl": "%(id)s.%(ext)s",
-        "geo_bypass": True,
-        "nocheckcertificate": True,
-        "quiet": True,
-        "no_warnings": True,
-    }
-
-
 def download_song(link, name):
     with YoutubeDL(ydl_opts) as ydl:
-        ydl.cache.remove()
-        ydl.download([link])
-        info = ydl.extract_info(link, download=False)
-        os.rename(f"{info['id']}.mp3", f"{name}.mp3")
-        audio_file = f"{name}.mp3"
+        info = ydl.extract_info(link, download=True)
+        filename = ydl.prepare_filename(info)
+        # MP3 faylını /tmp-ə köçür
+        audio_file = f"/tmp/{name}.mp3"
+        possible_files = [
+            filename.replace(".webm", ".mp3"),
+            filename.replace(".m4a", ".mp3"),
+            filename.replace(".mp4", ".mp3"),
+        ]
+        for f in possible_files:
+            if os.path.exists(f):
+                os.rename(f, audio_file)
+                break
         return audio_file
 
 
 def download_thumbnail(name, thumbnail):
     try:
-        thumb_name = f"{name}.jpg"
+        thumb_name = f"/tmp/{name}.jpg"
         thumb = requests.get(thumbnail, allow_redirects=True)
         with open(thumb_name, "wb") as file:
             file.write(thumb.content)
     except:
-        thumb_name = "bot.jpg"
+        thumb_name = "/tmp/bot.jpg"
     return thumb_name
 
 
@@ -110,5 +104,5 @@ def add_metadata(audio_file, title, artist, thumb_name):
 def remove_files(audio_file, thumb_name):
     if os.path.exists(audio_file):
         os.remove(audio_file)
-    if thumb_name != "bot.jpg" and os.path.exists(thumb_name):
+    if thumb_name.endswith(".jpg") and os.path.exists(thumb_name):
         os.remove(thumb_name)
