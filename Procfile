@@ -1,1 +1,1 @@
-worker: python3 -m MultiRobot
+worker: python3 -m Song
