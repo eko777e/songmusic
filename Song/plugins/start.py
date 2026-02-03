@@ -20,19 +20,19 @@ async def start(client, message):
                 except:
                     pass
                 url = f"https://youtu.be/{videoid}"
-                mystic = await message.reply_text("`🔍Musiqi axtarılır...`")
+                mystic = await message.reply_text("🔍 **Musiqi axtarılır...**")
                 result = await loop.run_in_executor(None, get_yt_info_query, url)
                 if result:
                     title, duration_min, thumb, videoid, link = result
                     if str(duration_min) == "None":
-                        return await mystic.edit("❌Canlı musiqiləri yükləmək olmur")
+                        return await mystic.edit("❌ Canlı musiqiləri yükləmək olmur")
                     await mystic.delete()
                     buttons = song_markup(videoid, message.from_user.id)
-                    return await message.reply_photo(photo=thumb, caption=f"📎**Adı**: [{title}]({link})\n\n⏳**Müddəti**: {duration_min}", reply_markup=buttons)
+                    return await message.reply_photo(photo=thumb, caption=f"🎵 **Başlıq**: [{title}]({link})\n\n⏰ **Müddət**: {duration_min}\n\n🤖 **Bot:** @SongAzRobot", reply_markup=buttons)
                 else:
                     return await mystic.edit("❌Musiqi tapılmadı")
         else:
-            await message.reply_text(f"Salam {message.from_user.mention} 💞\nMən musiqi yükləmək botuyam**\nMənim funksiyalarım üçün Komandalar buttonuna toxun", reply_markup=start_markup)
+            await message.reply_text(f"**Salam** {message.from_user.mention} 💞\n**Mən musiqi yükləmək botuyam**\n**Mənim funksiyalarım üçün Komandalar buttonuna toxun**", reply_markup=start_markup)
             await app.send_message(LOG_GROUP_ID, f"👤{message.from_user.mention} botu başlatdı\n\n**🆔ID:** `{message.from_user.id}`")
             return await add_served_user(message.from_user.id)
     else:
@@ -43,17 +43,17 @@ async def start(client, message):
 
 @app.on_callback_query(filters.regex("cbstart"))
 async def cbstart(client, query):
-    await query.edit_message_text(f"Salam {query.from_user.mention} 💞\nMən musiqi yükləmək botuyam\nMənim funksiyalarım üçün Komandalar buttonuna toxun", reply_markup=start_markup)
+    await query.edit_message_text(f"**Salam** {query.from_user.mention} 💞\n**Mən musiqi yükləmək botuyam**\n**Mənim funksiyalarım üçün Komandalar buttonuna toxun**", reply_markup=start_markup)
 
 
 @app.on_message(filters.command("help"))
 async def help(client, message):
-    await message.reply_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz.", reply_markup=help_markup)
+    await message.reply_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz.", reply_markup=help_markup)
 
 
 @app.on_callback_query(filters.regex("cbhelp"))
 async def help_cb(client, query):
-    await query.edit_message_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz", reply_markup=help_cb_markup)
+    await query.edit_message_text(f"🔮 Komanda: /song\n📜 İstifadə: `/song Üzeyir Mehdizadə - Qara gözlər`\n\n🔮 Komanda: /search\n📜 İstifadə: `/search Üzeyir Mehdizadə - Qara gözlər`\n\n✅ Bota əlavə olaraq linkler ataraq yükləmə edə bilərsiniz", reply_markup=help_cb_markup)
 
 
 @app.on_message(filters.command("alive") & filters.user(OWNER_ID))
