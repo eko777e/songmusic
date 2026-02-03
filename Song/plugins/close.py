@@ -8,5 +8,5 @@ async def forceclose(client, query):
     callback_request = callback_data.split(None, 1)[1]
     user_id = callback_request
     if query.from_user.id != int(user_id):
-        return await query.answer("❌Bunu bağlamağa icazəniz yoxdur", show_alert=True)
+        return await query.answer("🤷🏻 **Bunu bağlamağ üçün icazən yoxdur.**", show_alert=True)
     await query.message.delete()
